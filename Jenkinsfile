@@ -34,7 +34,10 @@ pipeline {
 
     }
 
-        stage('Deploy Image') {
+    stage('Deploy Image') {
+              when {
+        branch 'development'
+      }
       steps {
         script {
           docker.withRegistry('', registryCredential) {
@@ -44,12 +47,18 @@ pipeline {
       }
     }
     stage('Remove Unused docker image') {
+              when {
+        branch 'development'
+      }
       steps {
         sh "docker rmi $registry:$BUILD_NUMBER"
       }
     }
 
     stage('production Branch Deploy Code') {
+              when {
+        branch 'development'
+      }
       when {
         branch 'production'
       }
