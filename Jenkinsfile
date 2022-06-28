@@ -29,6 +29,16 @@ pipeline {
                 sh 'docker build -t aptonsooraj/test-pipeline:latest .'
            }
         }
+        stage('Docker Push') {
+            when {
+                branch 'development'
+            }      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          sh 'docker push shanem/spring-petclinic:latest'
+        }
+      }
+        }
 
         stage('production Branch Deploy Code') {
             when {
