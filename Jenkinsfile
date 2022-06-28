@@ -1,4 +1,8 @@
 pipeline {
+      environment {
+    registry = "aptonsooraj/test-pipeline"
+    registryCredential = 'dockerhub'
+  }
     agent any
     stages {
         stage('Master Branch Deploy Code') {
@@ -20,25 +24,11 @@ pipeline {
                 branch 'development'
             }
             steps {
-                sh """
-                echo "Building Artifact from Develop branch"
-                """
-                sh """
-                echo "Deploying Code from Develop branch"
-                """
-                sh 'docker build -t aptonsooraj/test-pipeline:latest .'
+                script {
+                    docker.build registry + ":$BUILD_NUMBER"
+                }
+               
            }
-        }
-        stage('Docker Push') {
-            when {
-                branch 'development'
-            }     
-             steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker aptonsooraj/test-pipeline:latest'
-        }
-      }
         }
 
         stage('production Branch Deploy Code') {
