@@ -24,7 +24,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build($imagename:${env.BRANCH_NAME})
+          dockerImage = docker.build imagename
         }
       }
     }
@@ -33,7 +33,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$BUILD_NUMBER")
+            dockerImage.push("$BRANCH_NAME+$BUILD_NUMBER")
              dockerImage.push('latest')
 
           }
