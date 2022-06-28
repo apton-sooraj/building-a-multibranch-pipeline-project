@@ -35,11 +35,7 @@ pipeline {
     }
 
 
-    stage('Remove Unused docker image') {
-      steps {
-        sh "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }
+
 
         stage('Deploy Image') {
       steps {
@@ -50,7 +46,11 @@ pipeline {
         }
       }
     }
-
+    stage('Remove Unused docker image') {
+      steps {
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }z
 
     stage('production Branch Deploy Code') {
       when {
