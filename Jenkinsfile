@@ -26,6 +26,7 @@ pipeline {
                 sh """
                 echo "Deploying Code from Develop branch"
                 """
+                sh 'docker build -t aptonsooraj/test-pipeline:latest .'
            }
         }
 
