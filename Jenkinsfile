@@ -24,6 +24,8 @@ pipeline {
     stage('Building image') {
       steps{
         script {
+        echo 'Pulling...' + env.BRANCH_NAME
+         echo 'Pulling...' + env.BUILD_NUMBER
           dockerImage = docker.build imagename
         }
       }
