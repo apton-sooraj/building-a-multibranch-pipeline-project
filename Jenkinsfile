@@ -1,7 +1,6 @@
 pipeline {
   environment {
-    imagename = "/aptonone-qa/pipeline-test/new"
-    asia-south1-docker.pkg.dev/aptonone-qa/pipeline-test
+    imagename = "aptonone-qa/pipeline-test/new"
   }
   agent any
   stages {
