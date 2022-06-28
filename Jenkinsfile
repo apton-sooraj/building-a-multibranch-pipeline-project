@@ -39,7 +39,7 @@ pipeline {
       steps {
         sh """
         
-        echo "Building Artifact from production branch"
+        echo "Building Artifact from production brancha"
         """
         
         sh """
