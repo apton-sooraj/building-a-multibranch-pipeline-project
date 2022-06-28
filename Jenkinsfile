@@ -1,46 +1,52 @@
 pipeline {
-    agent any
-    stages {
-        stage('Master Branch Deploy Code') {
-            when {
-                branch 'master'
-            }
-            steps {
-                sh """
-                echo "Building Artifact from Master branch"
-                """
- 
-                sh """
-                echo "Deploying Code from Master branch"
-                """
-            }
+  environment {
+    imagename = "aptonsooraj/test-pipeline"
+    registryCredential = 'dockerhub'
+  }
+  agent any
+  stages {
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
         }
-        stage('Develop Branch Deploy Code') {
-            when {
-                branch 'development'
-            }
-            steps {
-                sh """
-                echo "Building Artifact from Develop branch"
-                """
-                sh """
-                echo "Deploying Code from Develop branch"
-                """
-           }
-        }
-
-        stage('production Branch Deploy Code') {
-            when {
-                branch 'production'
-            }
-            steps {
-                sh """
-                echo "Building Artifact from production branch"
-                """
-                sh """
-                echo "Deploying Code from production branch"
-                """
-           }
-        }
+      }
     }
-}
+
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push(env.BRANCH_NAME+"-"+ env.BUILD_NUMBER)
+
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $imagename:$BRANCH_NAME-$BUILD_NUMBER"
+         sh "docker rmi $imagename:latest"
+
+      }
+    }
+
+    stage('production Branch Deploy Code') {
+
+      when {
+        branch 'production'
+      }
+      steps {
+        sh """
+        
+        echo "Building Artifact from production branch"
+        """
+        
+        sh """
+        
+        echo "Deploying Code from production branch"
+        """
+        
+      }
+    }
+  }
