@@ -24,8 +24,6 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-        echo 'Pulling...' + env.BRANCH_NAME
-         echo 'Pulling...' + env.BUILD_NUMBER
           dockerImage = docker.build imagename
         }
       }
@@ -35,7 +33,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage.push(${env.BRANCH_NAME}+"-"+${env.BUILD_NUMBER})
+            dockerImage.push(env.BRANCH_NAME+"-"+ env.BUILD_NUMBER)
 
           }
         }
@@ -43,7 +41,7 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $imagename:$BUILD_NUMBER"
+        sh "docker rmi $imagename:$BRANCH_NAME-$BUILD_NUMBER"
          sh "docker rmi $imagename:latest"
 
       }
