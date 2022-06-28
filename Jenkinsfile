@@ -35,7 +35,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$BRANCH_NAME+"-"+$BUILD_NUMBER")
+            dockerImage.push($BRANCH_NAME+"-"+$BUILD_NUMBER)
 
           }
         }
