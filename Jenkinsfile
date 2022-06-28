@@ -32,10 +32,11 @@ pipeline {
         stage('Docker Push') {
             when {
                 branch 'development'
-            }      steps {
+            }     
+             steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
           sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker push shanem/spring-petclinic:latest'
+          sh 'docker aptonsooraj/test-pipeline:latest'
         }
       }
         }
