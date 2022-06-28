@@ -15,7 +15,7 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
-          docker.withRegistry( 'https://asia-south1-docker.pkg.dev', 'gcr:[test]') {
+          docker.withRegistry( 'https://asia-south1-docker.pkg.dev', 'gcr:test') {
             dockerImage.push(env.BRANCH_NAME+"-"+ env.BUILD_NUMBER)
 
           }
