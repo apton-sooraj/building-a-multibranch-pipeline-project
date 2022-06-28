@@ -56,9 +56,7 @@ pipeline {
     }
 
     stage('production Branch Deploy Code') {
-              when {
-        branch 'development'
-      }
+
       when {
         branch 'production'
       }
