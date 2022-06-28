@@ -31,7 +31,7 @@ pipeline {
       }
     }
 
-    stage('production Branch Deploy Code') {
+    stage('production Branch Deploy Codes') {
 
       when {
         branch 'production'
