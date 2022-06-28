@@ -1,7 +1,7 @@
 pipeline {
   environment {
-    imagename = "aptonsooraj/test-pipeline"
-    registryCredential = 'dockerhub'
+    imagename = "/aptonone-qa/pipeline-test/new"
+    asia-south1-docker.pkg.dev/aptonone-qa/pipeline-test
   }
   agent any
   stages {
@@ -16,7 +16,7 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
-          docker.withRegistry( '', registryCredential ) {
+          docker.withRegistry( 'https://asia-south1-docker.pkg.dev', 'gcr:[test]') {
             dockerImage.push(env.BRANCH_NAME+"-"+ env.BUILD_NUMBER)
 
           }
