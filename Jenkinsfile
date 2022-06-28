@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "aptonsooraj/test-pipeline"
+    imagename = "aptonsooraj/test-pipeline"
     registryCredential = 'dockerhub'
   }
   agent any
@@ -21,37 +21,30 @@ pipeline {
         
       }
     }
-    stage('Develop Branch Deploy Code') {
-      when {
-        branch 'development'
-      }
-      steps {
+    stage('Building image') {
+      steps{
         script {
-          docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build imagename
         }
-
       }
-
     }
 
     stage('Deploy Image') {
-              when {
-        branch 'development'
-      }
-      steps {
+      steps{
         script {
-          docker.withRegistry('', registryCredential) {
-            dockerImage.push()
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+
           }
         }
       }
     }
     stage('Remove Unused docker image') {
-              when {
-        branch 'development'
-      }
-      steps {
-        sh "docker rmi $registry:$BUILD_NUMBER"
+      steps{
+        sh "docker rmi $imagename:$BUILD_NUMBER"
+         sh "docker rmi $imagename:latest"
+
       }
     }
 
